@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ZombieCursor Agent — Configuration & Status</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI, Roboto, "Helvetica Neue", Arial;max-width:900px;margin:28px auto;color:#111}
+    h1,h2{color:#0b5cff}
+    pre{background:#f6f8fa;padding:12px;border-radius:6px;overflow:auto}
+    .ok{color:green;font-weight:600}
+    .warn{color:darkorange;font-weight:600}
+    .err{color:red;font-weight:700}
+    section{margin-bottom:20px}
+    ul{line-height:1.5}
+  </style>
+</head>
+<body>
+  <h1>ZombieCursor — Agent & Server Configuration (সংক্ষিপ্ত অবস্থা)</h1>
+  <p style="color:#444;margin-top:0">এই পেজে সাম্প্রতিক কোড পরিবর্তন, টুলস, কনফিগারেশন এবং ভবিষ্যৎ পরিকল্পনা সংক্ষেপে দেওয়া আছে।</p>
+
+  <section>
+    <h2>1) সার্ভার ও লগিং</h2>
+    <ul>
+      <li><strong>লগার:</strong> `core/logging_config.py` তে <code>loguru</code> ব্যবহার করে কনসোল ও ফাইল (default: <code>logs/zombiecursor.log</code>) লোগার কনফিগ করা আছে।</li>
+      <li><strong>রোটেশন/রিটেনশন:</strong> লোগ ফাইল 10 MB এ রোটেট, 7 দিন ধরে রাখা হয়; আলাদা <code>errors.log</code> আছে এবং সেটি ERROR লেভেল রেকর্ড করে।</li>
+      <li><strong>সার্ভার রান:</strong> `server.main` থেকে FastAPI app চালানো হয়; startup/shutdown লগ করা হয়।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>2) LLM ব্যাকএন্ড (কনফিগারেশন)</h2>
+    <ul>
+      <li><strong>ডিফল্ট LLM হোস্ট:</strong> `LLM_HOST` setting ডিফল্টে <code>http://localhost:8007</code>।</li>
+      <li><strong>অললামা বিকল্প:</strong> `OLLAMA_HOST` প্রদান করলে Ollama ব্যাকএন্ড ব্যবহার করে।</li>
+      <li><strong>একটি ছোট কিন্তু গুরুত্বপূর্ণ সমস্যা:</strong> পূর্বে যদি আপনি host কনফিগে scheme (http://) না দেন (উদাহরণ: <code>127.0.0.1:11434</code>) তখন <code>requests</code> "No connection adapters were found" ত্রুটি দেয় — এই সমস্যার কারণ হচ্ছে scheme অনুপস্থিত।</li>
+      <li><strong>আমি যা বদলে দিয়েছি:</strong> `core/llm.py`-এ host normalization যোগ করা হয়েছে (auto-add <code>http://</code> যদি scheme না থাকে এবং trailing slash সরানো)। ফলে এখন environment-এ scheme ছাড়া host দিলেও কোড ঠিকভাবে কাজ করবে।</li>
+      <li><strong>কোডে এখন ব্যবহার:</strong> `core/llm.py`-এর ভিতরে `_normalize_host()` ফাংশন এবং `self.host = _normalize_host(...)` ব্যবহার করা হয়েছে।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3) এজেন্ট (ZombieCoder) — পার্সোনালিটি</h2>
+    <ul>
+      <li><strong>পার্সোনা ফাইল:</strong> `agents/coder/persona.md` বিদ্যমান এবং সেটিতে বাংলা (Banglish) ভিত্তিক সম্পূর্ণ persona লেখা আছে। (অর্থাৎ এজেন্টের বাংলা টোন/রেসপন্স কনটেন্ট রুটিন তৈরি করা আছে)</li>
+      <li><strong>কোডে লোড:</strong> `agents/coder/agent.py` এ এজেন্ট শুরুতেpersona লোড করে (`self.persona = self._load_persona()`), এবং সেটি চ্যাটে SYSTEM বার্তা হিসেবে পাঠায় — তাই পার্সোনা সঠিকভাবে যুক্ত আছে।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4) টুলস (যা যুক্ত আছে এবং কাকে কী অনুমতি)</h2>
+    <ul>
+      <li><strong>SearchTool:</strong> `tools/search_tool.py` — কোডবেস ও ডকুমেন্টেশন সার্চ করার জন্য রয়েছে (local repo search). এটি <em>ওয়েব সার্চ</em> নয়; বাইরে থেকে ওয়েব সার্চ করার কোনো HTTP crawler বা external search integration এখানে নেই। (<span class="warn">No external web-search tool</span>)</li>
+      <li><strong>FilesystemTool:</strong> `tools/fs_tool.py` — নিরাপদ ফাইল অপসারনের জন্য আছে। <span class="ok">কিন্তু</span> এটা শুধু project root (settings.project_root) এর ভেতরেই কাজ করে; অন্য ড্রাইভ বা root-এ অ্যাক্সেস এ টুল দিয়ে পাওয়া যাবে না (path must be inside project root)।</li>
+      <li><strong>SystemTool:</strong> `tools/system_tool.py` — system info, disk usage, process listing, environment, port checks এবং <code>run_command</code> সুবিধা দেয়। এটি অনেক অপারেশন সম্পাদন করতে পারে (subprocess চালানো, psutil ব্যবহার করে ডিটেইল)।<br>
+        - <em>নোট:</em> `run_command` default এ `cwd` হিসেবে project root ব্যবহার করে, কিন্তু কমান্ডে আপনি absolute path ব্যবহার করলে system-level কমান্ড দিয়ে অন্য ড্রাইভ/পাথে কাজ করানো সম্ভব। এছাড়া SystemTool.get_path_info মধ্যবর্তী path resolution কোনো base-path চেক করে না — তাই এটি ফাইল/ডিরেক্টরি সম্পর্কে তথ্য দিতে পারে (OS permissions অনুসারে)।</li>
+      <li><strong>PythonTool, GitTool, ইত্যাদি:</strong> প্রজেক্টে আছে এবং agent থেকে ব্যবহার করার উদ্দেশ্যে যুক্ত করা আছে (এগুলোর বিস্তারিত parameter schema কোডে রয়েছে)।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5) সিকিউরিটি ও পারমিশন সংক্ষেপ</h2>
+    <ul>
+      <li><strong>FilesystemTool:</strong> ব্রাউজ/রাইট উপলব্ধতা শুধুমাত্র `settings.project_root`-এর ভিতরে — তাই ডিফল্টভাবে প্রকল্প বাইরে ফাইল-রাইট নিষিদ্ধ।</li>
+      <li><strong>SystemTool:</strong> অনেক ক্ষমতা রাখে (process kill, run command, get environment)। এই টুলটি process-runtime permissions অনুসারে কাজ করে; যদি সার্ভার অ্যাকাউন্টে প্রশাসনিক/রুট পারমিশন না থাকে, কিছু কল ব্যর্থ হবে (AccessDenied) — তাই এজেন্টকে "ফুল পারমিশন" দেয়ার আগে সাবধানে সিকিউরিটি বিবেচনা করুন।</li>
+      <li><strong>সুপারিশ:</strong> এজেন্ট থেকে system-level অপারেশন চালাতে চাইলে পৃথক, নিরাপদ environment/VM রাখুন এবং API key/অথরাইজেশন ব্যবহার করে অনুমোদন সীমাবদ্ধ করুন।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>6) বর্তমানে সঠিকভাবে কাজ করছে (সংক্ষিপ্ত তালিকা)</h2>
+    <ul>
+      <li class="ok">Logging system initialized messages — OK (via `core/logging_config.py`).</li>
+      <li class="ok">Agent initialization messages — OK (`agents/coder/agent.py`).</li>
+      <li class="ok">LLM host normalization — patched (now auto-add <code>http://</code> when missing) and provider metadata is exposed via <code>LocalLLM.provider_info()</code>.</li>
+      <li class="ok">Basic memory integration — agent now attempts to retrieve up to 5 relevant memory entries and include them in the prompt when <code>ENABLE_MEMORY</code> is true.</li>
+      <li class="ok">SearchTool guidance — agent prompts now explicitly instruct the model to prefer the <code>SearchTool</code> for repo lookups.</li>
+      <li class="warn">No external web-search tool — SearchTool is repo-only. If you need web search, add an external search tool (example: Bing/WebSearch or custom crawler).</li>
+      <li class="warn">FilesystemTool restricted to project root — this is intentional for safety. Use SystemTool for broader system queries (with caution).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>7) কী করা হয়েছে (চূড়ান্ত নির্দেশ)</h2>
+    <ul>
+      <li>কোডে একটি ছোট patch করা হয়েছে: <code>core/llm.py</code>-এ host normalization যোগ করা হয়েছে — এখন scheme না থাকলেও host ঠিক হয়ে যায়।</li>
+      <li>আপনি চাইলে environment-এ <code>OLLAMA_HOST</code> সেট করতে পারেন যেমন: <pre>OLLAMA_HOST="http://127.0.0.1:11434"</pre> — কিন্তু এখন এটাও থাকা লাগবে না কারণ কোড auto-fix করে নেবে।</li>
+      <li>ওয়েব সার্চ দরকার হলে আমি sample tool (Bing API wrapper বা সার্চ-স্ক্র্যাপার) তৈরি করে দেব এবং agent tool-list-এ যুক্ত করে দেব।</li>
+      <li>এজেন্টকে অন্য ড্রাইভে পূর্ণ টার্মিনাল প্রবেশদ্বার দিতে চাইলে সেটিংস ও নিরাপত্তা পরামর্শ দেব এবং `SystemTool.run_command`/`get_path_info` সম্পর্কে সীমাবদ্ধতা ও ঝুঁকি ব্যাখ্যা করব।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>8) Phase 2 - বাস্তবায়িত পরিবর্তন</h2>
+    <ul>
+      <li class="ok">Tool invocation loop: যদি LLM একটি JSON-style action ফেরত দেয় (যেমন {"tool":"search","operation":"search_text","params":{...}}) তাহলে সার্ভার সেই টুল কলটি একটিবার চালাবে এবং টুলের আউটপুট LLM-কে দেখিয়ে চূড়ান্ত উত্তর নেবে।</li>
+      <li class="ok">Per-agent memory keys: এজেন্ট রেসপন্সগুলো এখন `agent:{agent_type}:req:{key}` আকারে স্টোর হয় (যদি `ENABLE_MEMORY` সত্য হয়) — ফলে পরে agent-এর জন্য রিলেভ্যান্ট নোট খুঁজে আনা সহজ।</li>
+      <li class="ok">Status endpoint: `/status/llm` এখন `LocalLLM.provider_info()` থেকে normalized provider metadata (normalized host, model, timeout, max_tokens) ফেরত দেয়।</li>
+      <li class="warn">Limitations: একবারে শুধু একটি টুল কল করার সমর্থন আছে (one-step tool execution). Full action planning ও multi-step tool orchestration প্রয়োজন হলে Phase 3 এ state machine বা action planner যোগ করা হবে।</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>10) Short Design / Next Plans</h2>
+    <ul>
+      <li><strong>Cache TTL:</strong> Web-search cache now supports TTL (default 3 days). Expired entries are considered miss but returned as <code>cache_stale</code> if provider fails.</li>
+      <li><strong>Size & Eviction:</strong> Plan to add a max-size and eviction policy (oldest-first or LRU) to prevent unbounded growth.</li>
+      <li><strong>Invalidation:</strong> Add an admin endpoint to invalidate cache keys and a small CLI helper for local invalidation.</li>
+      <li><strong>CI & Tests:</strong> Convert the test script to `pytest` and add CI workflow to run caching tests on PRs.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>9) Web Search Tool (নতুন)</h2>
+    <ul>
+      <li class="ok">একটি external web-search tool যুক্ত করা হলো: <code>tools/web_search_tool.py</code> — ডিফল্ট provider হচ্ছে Bing (আপনি চাইলে SerpAPI ব্যবহার করতে পারেন)।</li>
+      <li>কিভাবে চালাবেন: environment-এ `BING_API_KEY` সেট করুন অথবা `SERPAPI_KEY` (প্রয়োজনে):
+        <pre>setx BING_API_KEY "&lt;your-key&gt;"
+    setx BING_ENDPOINT "https://api.bing.microsoft.com/v7.0/search"</pre>
+      </li>
+      <li class="warn">নোট: Bing API key প্রয়োজন; না থাকলে টুল একটি ব্যাখ্যামূলক error ফেরত দেবে।</li>
+      <li>এজেন্ট থেকে ব্যবহার: মডেল কে নির্দেশ দিন JSON আউটপুট হিসেবে একটি action ফেরত দিতে, উদাহরণ:
+      <pre>{
+  "tool": "web_search",
+  "operation": "search_web",
+  "params": { "query": "how to use sqlite in python", "count": 5 }
+}</pre>
+      এভাবেই agent টুল কল করবে, টুল আউটপুট LLM-কে দেখাবে এবং চূড়ান্ত উত্তর তৈরি করবে।</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Generated: 자동 রিপোর্ট — repo ফাইল দেখে তৈরি করা হলো। যদি আপনি চান, আমি এখনই (A) web-search tool যুক্ত করব, (B) SystemTool কে আর বেশি রাষ্ট্রীয়ভাবে সীমাবদ্ধ করব, অথবা (C) logging-এ stack traces দেখানোর জন্য `log.exception` লাগিয়ে দেব। কোনটা আগে করতে বলবেন?</p>
+  </footer>
+</body>
+</html>
