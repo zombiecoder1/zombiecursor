@@ -114,6 +114,12 @@ This project is hosted on GitHub at: [https://github.com/zombiecoder1/zombiecurs
 
 You can contribute to the project, report issues, or fork it for your own use.
 
+## Branch Information
+
+This repository now includes a dedicated branch for agent workstation layer updates:
+- **Branch Name**: `feature/agent-workstation-updates`
+- **Purpose**: Implementation of the agent workstation layer components as documented
+
 ## License
 
 © 2024 Developer Zone. All rights reserved.
