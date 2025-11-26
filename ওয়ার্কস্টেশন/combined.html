@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এজেন্ট ওয়ার্কস্টেশন সমন্বিত পরিকল্পনা</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { text-align: center; margin-bottom: 20px; }
+        .section { margin-bottom: 30px; }
+        .section h2 { border-left: 5px solid #667eea; padding-left: 10px; }
+        ul { margin-left: 20px; }
+        .code { background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; overflow-x: auto; }
+        .step { background: #e8f5e9; padding: 10px; margin: 10px 0; border-left: 4px solid #4caf50; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>এজেন্ট ওয়ার্কস্টেশন সমন্বিত পরিকল্পনা</h1>
+
+    <div class="section">
+        <h2>১. সংক্ষিপ্ত বিবরণ (Overview)</h2>
+        <p>এই পেজটি চারটি বিদ্যমান পেজ (clod.html, deepseek.html, grok.html, z.ai.html) থেকে গুরুত্বপূর্ণ ধারণা, ফাইল‑ফোল্ডার গঠন, ডিপেন্ডেন্সি এবং লজিককে একত্রে সংযুক্ত করে একটি সহজ‑বোধ্য গাইড তৈরি করে। লক্ষ্য হল এজেন্টকে কীভাবে কাজগুলো আপডেট করতে হবে তা ধাপে‑ধাপে নির্দেশ দেওয়া এবং ক্লায়েন্টকে বুঝিয়ে দেওয়া যে সিস্টেম কীভাবে কাজ করে, কোনো টেকনিক্যাল শব্দ ছাড়াই।</p>
+    </div>
+
+    <div class="section">
+        <h2>২. প্রস্তাবিত মূল বিষয়বস্তু (Proposed Content)</h2>
+        <ul>
+            <li>সিস্টেমের মূল উদ্দেশ্য ও লক্ষ্য</li>
+            <li>বর্তমান উপাদানসমূহের সংক্ষিপ্ত তালিকা</li>
+            <li>নতুন প্রস্তাবিত উপাদান ও উন্নতি</li>
+            <li>ফাইল‑ফোল্ডার স্ট্রাকচার ও ডিপেন্ডেন্সি</li>
+            <li>লজিকের প্রবাহ (কীভাবে ডেটা প্রবাহিত হয়)</li>
+            <li>এজেন্টের জন্য ধাপে‑ধাপে আপডেট নির্দেশনা</li>
+            <li>ক্লায়েন্টের জন্য সহজ ব্যাখ্যা</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>৩. ফাইল‑ফোল্ডার গঠন (Folder Structure)</h2>
+        <pre class="code">.
+├─ assets/               # ছবি, আইকন, ফন্ট ইত্যাদি
+├─ components/           # পুনঃব্যবহারযোগ্য UI কম্পোনেন্ট (card, badge ইত্যাদি)
+├─ config/               # config.yaml, personality.yaml ইত্যাদি
+├─ data/                 # ChromaDB / Milvus এর ডেটা ফাইল
+├─ scripts/              # রুটিন টাস্ক (celery, redis, রিকোয়েস্ট স্ক্রিপ্ট)
+├─ static/               # স্ট্যাটিক CSS ও JS ফাইল
+├─ templates/            # HTML টেমপ্লেট (এখানে combined.html থাকবে)
+└─ README.md             # প্রকল্পের সংক্ষিপ্ত বর্ণনা
+</pre>
+        <p>এই গঠনটি পূর্বের চারটি পেজে ব্যবহৃত ফোল্ডারগুলোকে একত্রে সাজিয়ে দেয়, যাতে সব উপাদান এক জায়গায় থাকে এবং এজেন্ট সহজে আপডেট করতে পারে।</p>
+    </div>
+
+    <div class="section">
+        <h2>৪. ডিপেন্ডেন্সি (Dependencies)</h2>
+        <ul>
+            <li><strong>ডেটাবেস:</strong> ChromaDB অথবা Milvus – দ্রুত সেম্যান্টিক সার্চের জন্য।</li>
+            <li><strong>ক্যাশ:</strong> Redis – সাময়িক মেমোরি ও রেসপন্স ক্যাশিং।</li>
+            <li><strong>ব্যাকগ্রাউন্ড টাস্ক:</strong> Celery অথবা RQ – দীর্ঘ সময়ের কাজ ব্যাকগ্রাউন্ডে চালাতে।</li>
+            <li><strong>মনিটরিং:</strong> Prometheus + Grafana – সিস্টেমের স্বাস্থ্য ও পারফরম্যান্স দেখার জন্য।</li>
+            <li><strong>ফ্রন্ট‑এন্ড:</strong> Vanilla HTML, CSS এবং হালকা JavaScript (কোনো ফ্রেমওয়ার্ক নয়)।</li>
+        </ul>
+        <p>এই ডিপেন্ডেন্সিগুলো সবই ওপেন‑সোর্স এবং সহজে ইনস্টল করা যায়। ক্লায়েন্টকে আলাদা করে ইনস্টলেশন গাইড দিতে হবে না, কারণ সবকিছু Docker‑এর মাধ্যমে অথবা লোকাল প্যাকেজ ম্যানেজার দিয়ে একসাথে চালানো যাবে।</p>
+    </div>
+
+    <div class="section">
+        <h2>৫. লজিকের প্রবাহ (How It Works)</h2>
+        <ol>
+            <li>ইউজার প্রশ্ন আসে → <strong>ইনপুট ভ্যালিডেশন</strong> লেয়ার প্রথমে চেক করে নিরাপদ কিনা।</li>
+            <li>সঠিক হলে প্রশ্নটি <strong>RAG পাইপলাইন</strong>‑এ পাঠানো হয়, যেখানে ডেটাবেস (ChromaDB) থেকে প্রাসঙ্গিক তথ্য তোলা হয়।</li>
+            <li>প্রাপ্ত তথ্য এবং প্রশ্ন একসাথে AI মডেলে (যেমন GPT‑4, Gemini) পাঠানো হয় → <strong>উত্তর তৈরি হয়</strong>।</li>
+            <li>উত্তরটি <strong>আউটপুট ভ্যালিডেশন</strong> দিয়ে চেক করা হয়, হ্যালুসিনেশন বা সংবেদনশীল তথ্য আছে কিনা।</li>
+            <li>সব ঠিক থাকলে উত্তরটি ইউজারকে পাঠানো হয় এবং একই সাথে Redis‑এ ক্যাশ করা হয়, যাতে পরের একই প্রশ্ন দ্রুত উত্তর পাওয়া যায়।</li>
+            <li>প্রতিটি ধাপের মেট্রিক্স Prometheus‑এ রেকর্ড হয়, Grafana‑তে ড্যাশবোর্ডে দেখা যায়।</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>৬. এজেন্টের জন্য আপডেট ধাপ (Step‑by‑Step for Agent)</h2>
+        <div class="step">
+            <strong>ধাপ ১:</strong> <code>templates/combined.html</code> ফাইলটি ওপেন করুন।
+        </div>
+        <div class="step">
+            <strong>ধাপ ২:</strong> ফোল্ডার গঠন নিশ্চিত করুন – যদি কোনো ফোল্ডার না থাকে, <code>mkdir assets components config data scripts static templates</code> চালান।
+        </div>
+        <div class="step">
+            <strong>ধাপ ৩:</strong> ডিপেন্ডেন্সি ইনস্টল করুন – <code>pip install chromadb redis celery prometheus_client</code> (বা Docker‑এ চালান)।
+        </div>
+        <div class="step">
+            <strong>ধাপ ৪:</strong> <code>config/config.yaml</code>‑এ মডেল, টাইমআউট, টোকেন সীমা ইত্যাদি সেট করুন।
+        </div>
+        <div class="step">
+            <strong>ধাপ ৫:</strong> রেডিস ও চ্রোমা ডেটাবেস চালু করুন (<code>redis-server</code>, <code>chromadb start</code>)।
+        </div>
+        <div class="step">
+            <strong>ধাপ ৬:</strong> ব্যাকগ্রাউন্ড টাস্ক (Celery) চালু করুন – <code>celery -A tasks worker --loglevel=info</code>।
+        </div>
+        <div class="step">
+            <strong>ধাপ ৭:</strong> <code>scripts/run_server.py</code> চালিয়ে পুরো সিস্টেম চালু করুন।
+        </div>
+        <div class="step">
+            <strong>ধাপ ৮:</strong> ব্রাউজারে <code>http://localhost:8000/combined.html</code> খুলে ফলাফল দেখুন।
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>৭. ক্লায়েন্টের জন্য সহজ ব্যাখ্যা (Client Friendly Explanation)</h2>
+        <p>এই সিস্টেমটি আপনার প্রশ্নের উত্তর দ্রুত, সঠিক এবং নিরাপদভাবে দেয়। প্রথমে প্রশ্নটি যাচাই করে, তারপর আমাদের ডেটাবেসে প্রাসঙ্গিক তথ্য খুঁজে, AI‑কে পাঠায় এবং শেষ পর্যন্ত উত্তরটি আবার চেক করে ইউজারকে দেখায়। সবকিছু স্বয়ংক্রিয়ভাবে কাজ করে, তাই আপনি কোনো জটিল সেটিং করতে হবে না – শুধু প্রশ্ন করুন, উত্তর পেয়ে যান।</p>
+    </div>
+
+    <footer>
+        <p>© ২০২৩ এজেন্ট ওয়ার্কস্টেশন সমন্বিত পরিকল্পনা | সব অধিকার সংরক্ষিত</p>
+    </footer>
+</div>
+</body>
+</html>

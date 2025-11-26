@@ -1,0 +1,9 @@
+2025-11-26 06:29:55 | INFO     | core.logging_config:setup_logging:46 - Logging system initialized
+2025-11-26 06:29:57 | INFO     | core.llm:__init__:31 - Using Ollama backend at 127.0.0.1:11434
+2025-11-26 06:29:57 | INFO     | agents.coder.agent:__init__:40 - ZombieCoder Coder Agent initialized
+2025-11-26 06:30:02 | INFO     | core.logging_config:setup_logging:46 - Logging system initialized
+2025-11-26 06:30:03 | INFO     | core.llm:__init__:31 - Using Ollama backend at 127.0.0.1:11434
+2025-11-26 06:30:03 | INFO     | agents.coder.agent:__init__:40 - ZombieCoder Coder Agent initialized
+2025-11-26 06:30:04 | INFO     | core.logging_config:setup_logging:46 - Logging system initialized
+2025-11-26 06:30:04 | INFO     | core.llm:__init__:31 - Using Ollama backend at 127.0.0.1:11434
+2025-11-26 06:30:04 | INFO     | agents.coder.agent:__init__:40 - ZombieCoder Coder Agent initialized

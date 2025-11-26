@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এজেন্ট ওয়ার্কস্টেশন লেয়ার: সম্পূর্ণ পরিকল্পনা ও রোডম্যাপ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .alert-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+            border-left: 5px solid #fff;
+        }
+        
+        .alert-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            position: relative;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: #764ba2;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .component-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .component-card:hover {
+            border-left-width: 8px;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .component-card.new {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        
+        .component-card.enhanced {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .badge-current {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-new {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-enhanced {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .explanation-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .explanation-box strong {
+            color: #1e40af;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .why-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .why-box strong {
+            color: #92400e;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f9fafb;
+        }
+        
+        .roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .roadmap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .roadmap-number {
+            min-width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .roadmap-content {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .priority-high {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .priority-medium {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .priority-low {
+            border-left: 4px solid #10b981;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 1em;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .roadmap-item {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 এজেন্ট ওয়ার্কস্টেশন লেয়ার</h1>
+            <p class="subtitle">একটি সম্পূর্ণ, আধুনিক, স্থিতিশীল এবং হ্যালুসিনেশন-মুক্ত AI এজেন্ট সিস্টেম</p>
+        </header>
+
+        <div class="main-content">
+            <div class="alert-box">
+                <h3>🎯 আমাদের মূল লক্ষ্য</h3>
+                <p>একটি production-ready এজেন্ট ওয়ার্কস্টেশন লেয়ার তৈরি করা যা:</p>
+                <ul>
+                    <li>✅ সম্পূর্ণভাবে hallucination-free (ভুল তথ্য দেবে না)</li>
+                    <li>✅ আধুনিক এবং scalable (বড় প্রজেক্টে কাজ করবে)</li>
+                    <li>✅ নিরাপদ এবং secure (ডেটা সুরক্ষিত থাকবে)</li>
+                    <li>✅ সহজে customize করা যায় (প্রতিটি প্রজেক্টের জন্য আলাদা)</li>
+                    <li>✅ cost-effective (খরচ নিয়ন্ত্রণে থাকবে)</li>
+                </ul>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-container">
+                <button class="tab active" onclick="switchTab('overview')">সংক্ষিপ্ত বিবরণ</button>
+                <button class="tab" onclick="switchTab('current')">বর্তমান উপাদান</button>
+                <button class="tab" onclick="switchTab('proposed')">প্রস্তাবিত সংযোজন</button>
+                <button class="tab" onclick="switchTab('roadmap')">রোডম্যাপ</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="section">
+                    <h2>📊 সিস্টেম আর্কিটেকচার ওভারভিউ</h2>
+                    
+                    <div class="explanation-box">
+                        <strong>🤔 এজেন্ট ওয়ার্কস্টেশন লেয়ার কী?</strong>
+                        <p>এটি একটি মধ্যবর্তী স্তর যা AI মডেল (যেমন GPT, Claude) এবং আপনার অ্যাপ্লিকেশনের মধ্যে বসে। এটি নিশ্চিত করে যে AI সঠিক, নিরাপদ এবং কার্যকরভাবে কাজ করে।</p>
+                    </div>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>লেয়ার</th>
+                                <th>কাজ</th>
+                                <th>উদাহরণ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ইউজার ইন্টারফেস</strong></td>
+                                <td>ব্যবহারকারীর সাথে যোগাযোগ</td>
+                                <td>ওয়েব অ্যাপ, মোবাইল অ্যাপ</td>
+                            </tr>
+                            <tr style="background: #fef3c7;">
+                                <td><strong>ওয়ার্কস্টেশন লেয়ার ⭐</strong></td>
+                                <td>AI নিয়ন্ত্রণ ও পরিচালনা</td>
+                                <td>এই সিস্টেম!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AI মডেল</strong></td>
+                                <td>প্রকৃত AI প্রসেসিং</td>
+                                <td>GPT-4, Claude, Gemini</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ডেটা স্টোরেজ</strong></td>
+                                <td>তথ্য সংরক্ষণ</td>
+                                <td>Database, Vector Store</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h2>🎯 মূল চ্যালেঞ্জ এবং সমাধান</h2>
+                    
+                    <div class="component-card">
+                        <h3><span class="icon">⚠️</span>চ্যালেঞ্জ #1: Hallucination (ভুল তথ্য)</h3>
+                        <div class="explanation-box">
+                            <strong>সমস্যা:</strong>
+                            <p>AI মডেল কখনো কখনো ভুল বা মনগড়া তথ্য দেয়। যেমন: "ঢাকায় ২০২৫ সালে মেট্রো রেল চালু হয়েছে" (যদিও এটি ২০২২ সালে চালু হয়েছিল)</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>আমাদের সমাধান:</strong>
+                            <p>✅ RAG Pipeline: প্রকৃত ডেটাবেস থেকে তথ্য যাচাই<br>
+                            ✅ Response Verification: উত্তর দেওয়ার আগে fact-checking<br>
+                            ✅ Source Attribution: কোন তথ্য কোথা থেকে এসেছে তা জানানো</p>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <h3><span class="icon">🔐</span>চ্যালেঞ্জ #2: Security (নিরাপত্তা)</h3>
+                        <div class="explanation-box">
+                            <strong>সমস্যা:</strong>
+                            <p>ব্যবহারকারী ক্ষতিকর prompt দিতে পারে বা sensitive তথ্য চুরি করার চেষ্টা করতে পারে।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>আমাদের সমাধান:</strong>
+                            <p>✅ Input Sanitization: খারাপ ইনপুট ফিল্টার করা<br>
+                            ✅ Output Validation: উত্তরে sensitive তথ্য আছে কিনা চেক করা<br>
+                            ✅ Authentication: শুধু authorized ব্যবহারকারী access পাবে</p>
+                        </div>
+                    </div>
+
+                    <div class="component-card">
+                        <h3><span class="icon">💰</span>চ্যালেঞ্জ #3: Cost Management (খরচ নিয়ন্ত্রণ)</h3>
+                        <div class="explanation-box">
+                            <strong>সমস্যা:</strong>
+                            <p>AI API calls অনেক ব্যয়বহুল। প্রতিটি request এ টাকা খরচ হয়।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>আমাদের সমাধান:</strong>
+                            <p>✅ Smart Caching: একই প্রশ্নের উত্তর cache থেকে দেওয়া<br>
+                            ✅ Model Routing: সহজ কাজের জন্য সস্তা মডেল ব্যবহার<br>
+                            ✅ Token Optimization: অপ্রয়োজনীয় text কমানো</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Components Tab -->
+            <div id="current" class="tab-content">
+                <div class="section">
+                    <h2>🔧 বর্তমান উপাদানসমূহ</h2>
+                    <p style="margin-bottom: 25px;">আপনার বর্তমান কাঠামোতে যা ইতিমধ্যে আছে:</p>
+
+                    <div class="component-card">
+                        <span class="badge badge-current">বর্তমান</span>
+                        <h3><span class="icon">🗄️</span>ChromaDB / Milvus</h3>
+                        <div class="explanation-box">
+                            <strong>কী কাজ করে:</strong>
+                            <p>Vector Database - AI এর জন্য বিশেষ ধরনের ডেটাবেস যা semantic search করতে পারে।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>সহজ ভাষায় উদাহরণ:</strong>
+                            <p>ধরুন ব্যবহারকারী জিজ্ঞেস করল: "মোবাইল ব্যাংকিং কীভাবে করব?"<br>
+                            ChromaDB খুঁজে দেবে: "বিকাশ", "নগদ", "রকেট" সম্পর্কিত সব তথ্য - এমনকি যদি সেই শব্দগুলো প্রশ্নে না থাকে!</p>
+                        </div>
+                        <p><strong>ব্যবহার:</strong> Knowledge base management, semantic search</p>
+                    </div>
+
+                    <div class="component-card">
+                        <span class="badge badge-current">বর্তমান</span>
+                        <h3><span class="icon">⚡</span>Redis</h3>
+                        <div class="explanation-box">
+                            <strong>কী কাজ করে:</strong>
+                            <p>Super-fast in-memory cache - অত্যন্ত দ্রুত ডেটা store এবং retrieve করে।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>সহজ ভাষায় উদাহরণ:</strong>
+                            <p>যদি ১০০ জন ব্যবহারকারী একই প্রশ্ন করে, আমরা একবার AI কে জিজ্ঞেস করব এবং উত্তরটি Redis এ রেখে দেব। পরের ৯৯ বার সরাসরি Redis থেকে দ্রুত উত্তর দেব। সময় ও টাকা দুটোই বাঁচবে!</p>
+                        </div>
+                        <p><strong>ব্যবহার:</strong> Session caching, response caching</p>
+                    </div>
+
+                    <div class="component-card">
+                        <span class="badge badge-current">বর্তমান</span>
+                        <h3><span class="icon">⚙️</span>Celery / RQ</h3>
+                        <div class="explanation-box">
+                            <strong>কী কাজ করে:</strong>
+                            <p>Background task queue - ভারী কাজগুলো background এ করে, main process কে slow করে না।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>সহজ ভাষায় উদাহরণ:</strong>
+                            <p>যেমন: একটি ১০০ পৃষ্ঠার PDF analyze করতে ৫ মিনিট লাগবে। ব্যবহারকারীকে ৫ মিনিট wait করাবেন না! Celery এই কাজটি background এ করবে এবং শেষ হলে notification পাঠাবে।</p>
+                        </div>
+                        <p><strong>ব্যবহার:</strong> Long-running tasks, scheduled jobs</p>
+                    </div>
+
+                    <div class="component-card">
+                        <span class="badge badge-current">বর্তমান</span>
+                        <h3><span class="icon">📊</span>Prometheus + Grafana</h3>
+                        <div class="explanation-box">
+                            <strong>কী কাজ করে:</strong>
+                            <p>Monitoring & visualization - সিস্টেমের health এবং performance দেখার জন্য dashboard।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>সহজ ভাষায় উদাহরণ:</strong>
+                            <p>গাড়ির dashboard যেমন speed, fuel, temperature দেখায়, এটিও তেমনি AI system এর "স্বাস্থ্য" দেখায়: কতগুলো request আসছে, কত টাকা খরচ হচ্ছে, কোনো error হচ্ছে কিনা।</p>
+                        </div>
+                        <p><strong>ব্যবহার:</strong> System monitoring, performance tracking</p>
+                    </div>
+
+                    <div class="component-card">
+                        <span class="badge badge-current">বর্তমান</span>
+                        <h3><span class="icon">📄</span>Configuration Files</h3>
+                        <div class="explanation-box">
+                            <strong>কী কাজ করে:</strong>
+                            <p>YAML files - এজেন্টের সব settings এক জায়গায় রাখা।</p>
+                        </div>
+                        <p><strong>ফাইলসমূহ:</strong></p>
+                        <ul>
+                            <li><code>config.yaml</code> - Technical settings (model, timeout, tokens)</li>
+                            <li><code>personality.yaml</code> - Agent এর ব্যবহার style (tone, behavior)</li>
+                            <li><code>registry.yaml</code> - সব agents এর তালিকা</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposed Components Tab -->
+            <div id="proposed" class="tab-content">
+                <div class="section">
+                    <h2>🚀 প্রস্তাবিত নতুন সংযোজনসমূহ</h2>
+                    <p style="margin-bottom: 25px;">লক্ষ্য পূরণের জন্য যা যোগ করতে হবে:</p>
+
+                    <h3 style="color: #10b981; margin-top: 30px;">✨ High Priority (অবশ্যই লাগবে)</h3>
+
+                    <div class="component-card new priority-high">
+                        <span class="badge badge-new">নতুন</span>
+                        <span class="badge badge-critical">জরুরি</span>
+                        <h3><span class="icon">🛡️</span>Hallucination Detection & Prevention System</h3>
+                        <div class="explanation-box">
+                            <strong>কী কাজ করবে:</strong>
+                            <p>AI এর উত্তর সঠিক কিনা যাচাই করবে। ভুল তথ্য detect করে block করবে।</p>
+                        </div>
+                        <div class="why-box">
+                            <strong>কেন দরকার:</strong>
+                            <p>এটি আপনার #1 লক্ষ্য - hallucination-free system। এটি ছাড়া production এ যাওয়া ঝুঁকিপূর্ণ।</p>
+                        </div>
+                        <p><strong>Implementation করবে:</strong></p>
+                        <ul>
+                            <li><strong>Fact Verification:</strong> প্রতিটি claim knowledge base এর সাথে মিলিয়ে দেখা

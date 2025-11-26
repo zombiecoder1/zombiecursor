@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এজেন্ট ওয়ার্কস্টেশন লেয়ার: বর্তমান ও প্রস্তাবিত কাঠামো</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #28a745;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0077cc 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23004488" fill-opacity="0.2" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,224C960,224,1056,256,1152,245.3C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+            box-shadow: var(--shadow);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+        }
+        
+        .card h3 i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .card li {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .component-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .component-title i {
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+        
+        .tech-term {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .explanation {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .explanation h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .explanation h4 i {
+            margin-right: 8px;
+        }
+        
+        .green-text {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .note {
+            background: linear-gradient(135deg, #e6f0ff 0%, #d4e6ff 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+        
+        .note h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .note h3 i {
+            margin-right: 10px;
+        }
+        
+        .objective-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .objective-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .objective-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .objective-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .objective-item h4 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .objective-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>এজেন্ট ওয়ার্কস্টেশন লেয়ারের পরিকল্পনা ও রূপরেখা</h1>
+            <p>একটি সম্পূর্ণ, আধুনিক, স্থিতিশীল এবং হ্যালুসিনেশন-মুক্ত ওয়ার্কস্টেশন লেয়ার তৈরির উদ্দেশ্যে বর্তমান কাঠামো ও প্রস্তাবিত সংযোজন</p>
+        </header>
+
+        <div class="note">
+            <h3><i class="fas fa-bullseye"></i> আমাদের মূল উদ্দেশ্য</h3>
+            <p>একটি সম্পূর্ণ, আধুনিক, স্থিতিশীল (robust) এবং হ্যালুসিনেশন (hallucination) ও ডেমো রেসপন্স ব্যতীত ওয়ার্কস্টেশন লেয়ার তৈরি করা। এই লেয়ারটি আমরা আমাদের বিভিন্ন প্রোজেক্টে নির্দিষ্ট এজেন্টগুলোকে কাস্টমাইজ করে ব্যবহার করতে পারব।</p>
+            
+            <div class="objective-grid">
+                <div class="objective-item">
+                    <i class="fas fa-cube"></i>
+                    <h4>সম্পূর্ণতা</h4>
+                    <p>সকল প্রয়োজনীয় উপাদান একসাথে</p>
+                </div>
+                <div class="objective-item">
+                    <i class="fas fa-rocket"></i>
+                    <h4>আধুনিকতা</h4>
+                    <p>সর্বশেষ প্রযুক্তি ও পদ্ধতি ব্যবহার</p>
+                </div>
+                <div class="objective-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>স্থিতিশীলতা</h4>
+                    <p>বিভিন্ন অবস্থাতেও নির্ভরযোগ্য</p>
+                </div>
+                <div class="objective-item">
+                    <i class="fas fa-brain"></i>
+                    <h4>বুদ্ধিদীপ্ত</h4>
+                    <p>হ্যালুসিনেশন মুক্ত ও সঠিক</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="current">বর্তমান কাঠামো</div>
+            <div class="tab" data-tab="proposed">প্রস্তাবিত কাঠামো</div>
+            <div class="tab" data-tab="planning">পরিকল্পনা ও রোডম্যাপ</div>
+        </div>
+
+        <div class="tab-content active" id="current">
+            <div class="card">
+                <h3><i class="fas fa-layer-group"></i> বর্তমান কাঠামোর উপাদানসমূহ</h3>
+                <p>বর্তমানে আমাদের কাঠামোতে নিম্নলিখিত গুরুত্বপূর্ণ উপাদানগুলো অন্তর্ভুক্ত রয়েছে:</p>
+                
+                <ul>
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-database"></i>
+                            <div>
+                                <div class="tech-term">ChromaDB / Milvus</div>
+                                <div class="green-text">দ্রুত তথ্য খোঁজার সিস্টেম</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি এজেন্টের "মেমোরি" হিসেবে কাজ করে। যখন এজেন্টকে কোনো প্রশ্ন করা হয়, এটি তার পূর্বের জ্ঞানভান্ডার থেকে দ্রুততম সময়ে প্রাসঙ্গিক তথ্য খুঁজে বের করতে পারে। যেমন: আপনি যখন গুগলে কিছু সার্চ করেন, এটি যেভাবে দ্রুত ফলাফল দেখায়।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-bolt"></i>
+                            <div>
+                                <div class="tech-term">Redis</div>
+                                <div class="green-text">অস্থায়ী মেমোরি ব্যবস্থাপনা</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি এজেন্টের "স্বল্পমেয়াদী স্মৃতি"। যখন আপনি এজেন্টের সাথে কথোপকথন করছেন, এটি আপনার শেষ কয়েকটি বার্তা মনে রাখে যাতে কথোপকথনের ধারাবাহিকতা বজায় থাকে। যেমন: আপনি যখন ফোনে কারো সাথে কথা বলেন,对方 আপনার শেষ কথাগুলো মনে রেখেই পরের কথা বলে।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-tasks"></i>
+                            <div>
+                                <div class="tech-term">Celery / RQ</div>
+                                <div class="green-text">পটভূমিতে কাজ করার সিস্টেম</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি রেস্টুরেন্টের "কিচেন স্টাফ" এর মতো কাজ করে। যখন আপনি অর্ডার দেন, ওয়েটার (মূল সিস্টেম) অর্ডার নিয়ে কিচেনে (ব্যাকগ্রাউন্ড) পাঠিয়ে দেয়, এবং আপনি在此期间 অন্য কাজ করতে পারেন। এটি সিস্টেমকে দ্রুত ও কার্যকর রাখে।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <div class="tech-term">Prometheus + Grafana</div>
+                                <div class="green-text">সিস্টেম মনিটরিং ড্যাশবোর্ড</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি গাড়ির "ড্যাশবোর্ড" এর মতো, যা গাড়ির গতি, জ্বালানী এবং ইঞ্জিনের অবস্থা দেখায়। similarly, এটি আমাদের সিস্টেমের স্বাস্থ্য, কর্মক্ষমতা এবং সম্ভাব্য সমস্যাগুলো মনিটর করে।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-table"></i>
+                            <div>
+                                <div class="tech-term">SQLAlchemy / Alembic</div>
+                                <div class="green-text">ডাটাবেস ব্যবস্থাপনা</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি একটি "স্মার্ট ফাইল ক্যাবিনেট সিস্টেম" এর মতো যা ডেটা সংগঠিতভাবে সংরক্ষণ করে এবং প্রয়োজন অনুযায়ী পরিবর্তন করতে সাহায্য করে। যখন নতুন তথ্য যোগ করতে হয় বা কাঠামো পরিবর্তন করতে হয়, এটি সহজেই করতে দেয়।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-cogs"></i>
+                            <div>
+                                <div class="tech-term">config.yaml</div>
+                                <div class="green-text">এজেন্ট সেটিংস ফাইল</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি এজেন্টের "ব্যক্তিগত সেটিংস মেনু" এর মতো, যেখানে আমরা এজেন্টের নাম, এটি কোন AI মডেল ব্যবহার করবে, কতক্ষণ অপেক্ষা করবে ইত্যাদি নির্ধারণ করি।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <div class="tech-term">personality.yaml</div>
+                                <div class="green-text">এজেন্টের ব্যক্তিত্ব ফাইল</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি এজেন্টের "ব্যক্তিত্ব নির্ধারণকারী" ফাইল। যেমন: এটি কেমন ভাবে কথা বলবে (বন্ধুত্বপূর্ণ নাকি র formal), কী ধরনের সাহায্য দিতে পারবে, এবং কী ধরনের কাজ করতে পারবে ইত্যাদি।</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="proposed">
+            <div class="card">
+                <h3><i class="fas fa-plus-circle"></i> প্রস্তাবিত উন্নতিসমূহ</h3>
+                <p>আমাদের উদ্দেশ্য অর্জনের জন্য বর্তমান কাঠামোর সাথে প্রস্তাবিত অতিরিক্ত উপাদানসমূহ:</p>
+                
+                <ul>
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-search-plus"></i>
+                            <div>
+                                <div class="tech-term">RAG (Retrieval-Augmented Generation) Pipeline</div>
+                                <div class="green-text">স্মার্ট তথ্য সংগ্রহ ও উত্তর প্রস্তুতকরণ</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি একটি "স্মার্ট রিসার্চ অ্যাসিসটেন্ট" এর মতো কাজ করবে। যখন এজেন্টকে কোনো প্রশ্ন করা হবে, এটি প্রথমে তার জ্ঞানভান্ডার থেকে প্রাসঙ্গিক তথ্য সংগ্রহ করবে, তারপর সেই তথ্য ব্যবহার করে সঠিক ও প্রাসঙ্গিক উত্তর তৈরি করবে। এটি ভুল তথ্য বা গল্প তৈরি করা (হ্যালুসিনেশন) কমাবে।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-filter"></i>
+                            <div>
+                                <div class="tech-term">Input/Output Validation & Sanitization Layer</div>
+                                <div class="green-text">ইনপুট/আউটপুট পরীক্ষা ও পরিষ্কারকরণ</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি একটি "সিকিউরিটি গার্ড" এর মতো কাজ করবে, যা এজেন্টের কাছে আসা সকল তথ্য পরীক্ষা করবে ক্ষতিকারক কিনা এবং এজেন্টের দেওয়া উত্তরগুলোও পরীক্ষা করবে সঠিক ও নিরাপদ কিনা। এটি সিস্টেমকে হ্যাকারদের থেকে রক্ষা করবে এবং ভুল উত্তর দেওয়া থেকে বিরত রাখবে।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-route"></i>
+                            <div>
+                                <div class="tech-term">Model Abstraction/Routing Layer</div>
+                                <div class="green-text">একাধিক AI মডেল ব্যবস্থাপনা</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি একটি "স্মার্ট সুইচবোর্ড" এর মতো কাজ করবে যা বিভিন্ন AI মডেল (যেমন: OpenAI, Gemini) এর মধ্যে সংযোগ স্থাপন করবে। যদি একটি মডেল কাজ না করে বা খুব ধীর গতির হয়, এটি স্বয়ংক্রিয়ভাবে অন্য একটি মডেলে সুইচ করবে, যেমন বিদ্যুত চলে গেলে জেনারেটর চালু হয়।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-history"></i>
+                            <div>
+                                <div class="tech-term">Versioning & Rollback System</div>
+                                <div class="green-text">এজেন্ট সংস্করণ নিয়ন্ত্রণ</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি "টাইম মেশিন" এর মতো কাজ করবে। যদি এজেন্টের নতুন আপডেটে কোনো সমস্যা হয়, আমরা সহজেই পূর্বের স্ট্যাবল ভার্সনে ফিরে যেতে পারব। যেমন: মোবাইল অ্যাপ আপডেটে সমস্যা হলে পুরোনো ভার্সনে ফিরে যাওয়া।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-tools"></i>
+                            <div>
+                                <div class="tech-term">Tool & Function Calling Orchestrator</div>
+                                <div class="green-text">এজেন্ট টুলস ব্যবস্থাপনা</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি একটি "স্মার্ট টুলবক্স" এর মতো যা এজেন্টকে বিভিন্ন টুলস ব্যবহার করতে সাহায্য করবে। যেমন: ক্যালকুলেটর, ক্যালেন্ডার, ওয়েব ব্রাউজার ইত্যাদি। এটি নির্ধারণ করবে কোন টুল কখন এবং কীভাবে ব্যবহার করতে হবে।</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-comments"></i>
+                            <div>
+                                <div class="tech-term">Human-in-the-Loop (HITL) Feedback Mechanism</div>
+                                <div class="green-text">মানুষের ফিডব্যাক সিস্টেম</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-info-circle"></i> সহজ ভাষায় ব্যাখ্যা:</h4>
+                            <p>এটি একটি "রেটিং সিস্টেম" এর মতো কাজ করবে, যেখানে ব্যবহারকারীরা এজেন্টের উত্তরের quality like/dislike দিতে পারবে। এই রেটিং এজেন্টকে সময়ের সাথে আরও স্মার্ট এবং নির্ভুল হতে সাহায্য করবে।</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="planning">
+            <div class="card">
+                <h3><i class="fas fa-map-signs"></i> বাস্তবায়ন পরিকল্পনা ও রোডম্যাপ</h3>
+                <p>আমাদের লক্ষ্য অর্জনের জন্য ধাপে ধাপে পরিকল্পনা:</p>
+                
+                <ul>
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-flag"></i>
+                            <div>
+                                <div class="tech-term">ফেজ ১: বেসলাইন স্থাপন (১-২ সপ্তাহ)</div>
+                                <div class="green-text">বর্তমান সিস্টেম মূল্যায়ন ও উন্নয়ন পরিবেশ সেটআপ</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-tasks"></i> কাজসমূহ:</h4>
+                            <p>১. বর্তমান সকল উপাদান ডকুমেন্টেশন পর্যালোচনা<br>
+                               ২. উন্নয়ন ও টেস্টিং environment সেটআপ<br>
+                               ৩. বর্তমান সিস্টেমের performance বেঞ্চমার্ক নির্ধারণ</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-cogs"></i>
+                            <div>
+                                <div class="tech-term">ফেজ ২: কোর কম্পোনেন্ট উন্নয়ন (৩-৪ সপ্তাহ)</div>
+                                <div class="green-text">প্রস্তাবিত নতুন উপাদানগুলোর প্রোটোটাইপ তৈরি</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-tasks"></i> কাজসমূহ:</h4>
+                            <p>১. RAG পাইপলাইন ইমপ্লিমেন্টেশন<br>
+                               ২. Input/Output Validation লেয়ার তৈরি<br>
+                               ৩. Model Routing System ডেভেলপমেন্ট</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <div>
+                                <div class="tech-term">ফেজ ৩: ইন্টিগ্রেশন ও অপ্টিমাইজেশন (২-৩ সপ্তাহ)</div>
+                                <div class="green-text">সকল উপাদান একত্রিতকরণ ও performance optimization</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-tasks"></i> কাজসমূহ:</h4>
+                            <p>১. সকল কম্পোনেন্ট ইন্টিগ্রেশন<br>
+                               ২. এন্ড-টু-এন্ড টেস্টিং<br>
+                               ৩. Performance tuning ও scalability testing</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-vial"></i>
+                            <div>
+                                <div class="tech-term">ফেজ ৪: টেস্টিং ও refinement (২ সপ্তাহ)</div>
+                                <div class="green-text">বিস্তারিত টেস্টিং এবং ব্যবহারকারী ফিডব্যাক সংগ্রহ</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-tasks"></i> কাজসমূহ:</h4>
+                            <p>১. ইউজার এক্সপেরিয়েন্স টেস্টিং<br>
+                               ২. Security ও stability টেস্টিং<br>
+                               ৩. ব্যবহারকারী ফিডব্যাক অনুযায়ী refinement</p>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="component-title">
+                            <i class="fas fa-rocket"></i>
+                            <div>
+                                <div class="tech-term">ফেজ ৫: ডেপ্লয়মেন্ট ও মনিটরিং (১ সপ্তাহ)</div>
+                                <div class="green-text">প্রডাকশন environment এ ডেপ্লয় এবং continuous monitoring</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <h4><i class="fas fa-tasks"></i> কাজসমূহ:</h4>
+                            <p>১. Production environment এ ডেপ্লয়<br>
+                               ২. Monitoring ও alerting সিস্টেম সক্রিয়করণ<br>
+                               ৩. ডকুমেন্টেশন ফাইনালাইজেশন</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>© ২০২৩ এজেন্ট ওয়ার্কস্টেশন লেয়ার প্রোজেক্ট | একটি সম্পূর্ণ, আধুনিক এবং স্থিতিশীল এআই এজেন্ট প্ল্যাটফর্ম</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
