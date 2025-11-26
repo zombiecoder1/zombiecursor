@@ -129,6 +129,10 @@ This scaffold includes a comprehensive set of modern web development tools:
 - **Type Safety**: End-to-end TypeScript with Zod validation
 - **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
 
+## 🤝 GitHub Repository
+
+This project is hosted on GitHub at: [https://github.com/zombiecoder1/zombiecursor.git](https://github.com/zombiecoder1/zombiecursor.git)
+
 ## 🤝 Get Started with Z.ai
 
 1. **Clone this scaffold** to jumpstart your project
@@ -137,5 +141,4 @@ This scaffold includes a comprehensive set of modern web development tools:
 4. **Deploy with confidence** using the production-ready setup
 
 ---
-
 Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀

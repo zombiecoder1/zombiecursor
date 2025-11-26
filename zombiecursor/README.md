@@ -14,6 +14,7 @@ A local AI-powered coding assistant that provides Cursor AI-like functionality w
 - **Address**: 235 south pirarbag, Amtala Bazar, Mirpur -60 feet
 - **Website**: https://zombiecoder.my.id/
 - **Email**: infi@zombiecoder.my.id
+- **GitHub Repository**: https://github.com/zombiecoder1/zombiecursor.git
 
 ## Features
 
@@ -37,7 +38,7 @@ A local AI-powered coding assistant that provides Cursor AI-like functionality w
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/zombiecoder1/zombiecursor.git
 cd zombiecursor
 ```
 
@@ -106,6 +107,12 @@ ws.send(JSON.stringify({
 - [Architecture Guide](docs/ARCHITECTURE.md)
 - [Editor Integration](docs/EDITOR_INTEGRATION.md)
 - [Agent Persona Guide](docs/AGENT_PERSONA_GUIDE.md)
+
+## GitHub Repository
+
+This project is hosted on GitHub at: [https://github.com/zombiecoder1/zombiecursor.git](https://github.com/zombiecoder1/zombiecursor.git)
+
+You can contribute to the project, report issues, or fork it for your own use.
 
 ## License
 
